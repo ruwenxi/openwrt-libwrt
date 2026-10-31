@@ -25,4 +25,4 @@ jobs:
       artifact_prefix: 360v6-jd6600
       manifest_file: libwrt-qualcommax-ipq60xx.manifest
       release_summary: >-
-        这是开启全功能NSS的6.12内核固件，默认主题为Aurora；该固件在ImmortalWrt的基础上，添加了额外的软件包cpufreq、ddns、upnp、wol、samba4、vlmcsd、autoreboot、uhttpd、frps、frpc、diskman、hd-idle、acme、wireguard、watchcat、3cat、passwall，并添加了若干工具，具体详见IPQ60XX.config和General.config。
+        360 V6 与京东云 AX6600（雅典娜）的 NSS 固件（6.12 内核，NSS 12.5），默认主题 Aurora。两个设备内置 OpenClash、DDNS-Go；AX6600 另外内置 OpenList2、Aria2（含 AriaNg）和 athena-led。
