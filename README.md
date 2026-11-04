@@ -1,29 +1,28 @@
 # 360 V6 / 京东云 AX6600 — LibWrt NSS 云编译
 
-基于 [laipeng668/openwrt-ci-roc](https://github.com/laipeng668/openwrt-ci-roc) 精简，只保留一个编译流程。
+基于 [laipeng668/openwrt-ci-roc](https://github.com/laipeng668/openwrt-ci-roc) 精简，保留两个编译流程。
 
-## 说明
+## 两个编译流程
 
-- 源码：`laipeng668/openwrt-6.x`，分支 `25.12-nss`，6.12 内核，两台设备统一使用 NSS 固件 11.4（含 mesh 卸载）
-- NSS 版本是整次编译全局的，两台设备必须一致。NSS 12.5 只能配 6.18 内核（`laipeng668/immortalwrt` 的 `openwrt-25.12` + `TESTING_KERNEL`），在 6.12 上会编译失败
+| 流程 | 设备 | 源码 / 内核 / NSS | 内置插件 | Release 标签 |
+| --- | --- | --- | --- | --- |
+| `360v6-jd6600.yml` | 360 V6、京东云 AX6600 | `openwrt-6.x`（25.12-nss）/ 6.12 / NSS 11.4（含 mesh） | 都有 OpenClash、DDNS-Go；AX6600 另有 OpenList2、Aria2、athena-led | `360v6-jd6600` |
+| `JDCloud-ImmortalWrt.yml` | 京东云 AX6600 | `immortalwrt`（openwrt-25.12）/ 6.18 / NSS 12.5 | OpenClash、DDNS-Go、OpenList2、Aria2、athena-led | `AX6600-6.18` |
+
+- NSS 版本是整次编译全局的，同一个流程里的设备必须一致。NSS 12.5 只能配 6.18（ImmortalWrt 源码），在 6.12 上 `qca-nss-ecm` 会编译失败；反过来 11.4 对应 6.12。
 - 默认管理地址：`10.1.1.1`，用户 `root`，默认密码为空，**首次登录后请立即设置密码**
 - 设备名称（主机名）保持源码默认，不做修改
-
-| 设备 | 内置插件 |
-| --- | --- |
-| 360 V6（`qihoo_360v6`） | OpenClash、DDNS-Go |
-| 京东云 AX6600 雅典娜（`jdcloud_re-cs-02`） | OpenClash、DDNS-Go、OpenList2、Aria2（含 AriaNg）、athena-led |
-
-两个设备共有的插件写在 `General.config`；AX6600 专属插件写在 `360v6-jd6600.config` 的 `DEVICE_PACKAGES` 里。
 
 ## 文件结构
 
 | 路径 | 作用 |
 | --- | --- |
-| `.github/workflows/360v6-jd6600.yml` | 入口，在 Actions 手动运行 |
-| `.github/workflows/Build-OpenWrt.yml` | 被入口调用的通用构建流程，不要删 |
-| `configs/360v6-jd6600.config` | 设备与 NSS 配置 |
-| `configs/General.config` | 通用配置与插件选择 |
+| `.github/workflows/360v6-jd6600.yml` | 入口 1：360 V6 + AX6600（6.12） |
+| `.github/workflows/JDCloud-ImmortalWrt.yml` | 入口 2：AX6600（6.18） |
+| `.github/workflows/Build-OpenWrt.yml` | 被两个入口调用的通用构建流程，不要删 |
+| `configs/360v6-jd6600.config` | 入口 1 的设备与 NSS 配置 |
+| `configs/JDCloud.config` | 入口 2 的设备与 NSS 配置 |
+| `configs/General.config` | 两个流程共用的通用配置与插件 |
 | `scripts/Roc-script.sh` | 默认 IP、拉取第三方源码、编译前检查 |
 
 ## 增减插件

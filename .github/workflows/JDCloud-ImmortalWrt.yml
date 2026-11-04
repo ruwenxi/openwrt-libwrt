@@ -1,0 +1,28 @@
+name: JDCloud-ImmortalWrt
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  # schedule:
+  #   - cron: "0 18 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  Build:
+    uses: ./.github/workflows/Build-OpenWrt.yml
+    permissions:
+      contents: write
+      actions: write
+    with:
+      repo_url: https://github.com/laipeng668/immortalwrt.git
+      repo_branch: openwrt-25.12
+      config_file: configs/JDCloud.config
+      firmware_tag: AX6600-6.18
+      kernel_file: kernel-6.18
+      artifact_prefix: AX6600-6.18
+      manifest_file: immortalwrt-qualcommax-ipq60xx.manifest
+      release_summary: >-
+        京东云 AX6600（雅典娜）的 NSS 固件（6.18 内核，NSS 12.5），默认主题 Aurora。内置 OpenClash、DDNS-Go、OpenList2、Aria2（含 AriaNg）和 athena-led。
