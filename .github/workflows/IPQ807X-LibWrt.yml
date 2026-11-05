@@ -1,0 +1,28 @@
+name: IPQ807X-LibWrt
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  # schedule:
+  #   - cron: "0 18 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  Build:
+    uses: ./.github/workflows/Build-OpenWrt.yml
+    permissions:
+      contents: write
+      actions: write
+    with:
+      repo_url: https://github.com/laipeng668/openwrt-6.x.git
+      repo_branch: 25.12-nss
+      config_file: configs/IPQ807X.config
+      firmware_tag: IPQ807X
+      kernel_file: kernel-6.12
+      artifact_prefix: IPQ807X
+      manifest_file: libwrt-qualcommax-ipq807x.manifest
+      release_summary: >-
+        Linksys MX4300 的 NSS 固件（6.12 内核，NSS 11.4），默认主题 Aurora。内置 OpenClash（已预置 clash_meta 内核）、DDNS-Go、OpenList2、Aria2（含 AriaNg），不含 athena-led；具体详见 IPQ807X.config 和 General.config。
